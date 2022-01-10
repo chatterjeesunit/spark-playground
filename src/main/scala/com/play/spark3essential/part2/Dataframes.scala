@@ -1,7 +1,7 @@
 package com.play.spark3essential.part2
 
-import org.apache.spark.sql.types.{DoubleType, LongType, StringType, StructField, StructType}
-import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.types._
+import org.apache.spark.sql.{DataFrame, SaveMode, SparkSession}
 
 object Dataframes extends App {
 
@@ -85,6 +85,7 @@ object Dataframes extends App {
   manualDF.printSchema()
 
 
+
   import sparkSession.implicits._
 
   val anotherManualDF = personData
@@ -94,7 +95,78 @@ object Dataframes extends App {
 
   anotherManualDF.show()
   anotherManualDF.printSchema()
+  println(anotherManualDF.schema)
 
+
+  // Person Schema
+  val personSchema = StructType(
+    Seq(
+      StructField("First Name",StringType,true),
+      StructField("Last Name",StringType,true),
+      StructField("Age",IntegerType,false),
+      StructField("Gender",StringType,true),
+      StructField("Country",StringType,true),
+      StructField("Occupation",StringType,true)
+    ))
+
+  println("Reading person data in PERMISSIVE mode")
+  // Default read mode - permissive
+  // reading a json file which has 1 row which does not confirms to the schema
+  val personDataFrame = sparkSession
+    .read
+    .format("json")
+    .option("path", "src/main/resources/data/persons_data_malformed.json")
+    .schema(personSchema)
+    .load()
+
+  // will return all 4 person records, with the `age` field set to `null` in the malformed record
+  personDataFrame.show()
+
+
+
+  println("Reading person data in DROPMALFORMED mode")
+  // reading with mode - dropMalformed
+  sparkSession
+    .read
+    .format("json")
+    .options(Map(
+      "path"-> "src/main/resources/data/persons_data_malformed.json",
+      "mode" -> "dropMalformed"
+    ))
+    .schema(personSchema)
+    .load()
+    .show()
+
+
+  println("Reading person data in FAILFAST mode")
+  // reading with mode - failFast
+  // will throw error
+  // - org.apache.spark.SparkException: Malformed records are detected in record parsing. Parse Mode: FAILFAST.
+  sparkSession
+    .read
+    .format("json")
+    .options(Map(
+      "path"-> "src/main/resources/data/persons_data_malformed.json",
+      "mode" -> "failFast"
+    ))
+    .schema(personSchema)
+    .load()
+//    .show() // uncommenting this line will throw error
+
+
+
+  // Writing data frames
+  val personDF: DataFrame = personData
+    .map(x => (x._1, x._2, x._5, x._6))
+    .toDF(
+      "First Name", "Last Name", "Country", "Occupation")
+
+  personDF
+    .write
+    .format("json")
+    .mode(SaveMode.Overwrite)
+    .option("path", "src/main/resources/data/output/persons.json")
+    .save()
 
 
 }
