@@ -1,4 +1,4 @@
-name := "spark-essentials"
+name := "spark-playground"
 
 version := "0.1"
 
