@@ -1,6 +1,5 @@
 package com.play.spark3essential.part2
 
-import com.play.spark3essential.part2.ReadingDataFrames.dbProperties
 import org.apache.spark.sql.functions.col
 import org.apache.spark.sql.{DataFrame, SaveMode, SparkSession}
 
