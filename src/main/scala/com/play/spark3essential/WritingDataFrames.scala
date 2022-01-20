@@ -1,4 +1,4 @@
-package com.play.spark3essential.part2
+package com.play.spark3essential
 
 import org.apache.spark.sql.functions.col
 import org.apache.spark.sql.{DataFrame, SaveMode, SparkSession}
@@ -17,7 +17,7 @@ object WritingDataFrames extends App {
 
 
   // creating data frames manually - just provide a seq of tuples
-  val personData:  Seq[(String, String, Int, String, String, String)] =
+  val personData: Seq[(String, String, Int, String, String, String)] =
     Seq(
       ("John", "Doe", 35, "Male", "USA", "Product Manager"),
       ("Pedro", "Iglesia", 25, "Male", "Spain", "Software Developer"),
@@ -60,15 +60,14 @@ object WritingDataFrames extends App {
   // writing to a parquet
   personDF
     .select(
-      col("First Name") alias("FName"),
-      col("Last Name") alias("LName"),
+      col("First Name") alias ("FName"),
+      col("Last Name") alias ("LName"),
       col("Country"),
       col("Occupation")
     )
     .write
     .mode(SaveMode.Overwrite)
     .parquet("src/main/resources/data/output/persons.parquet")
-
 
 
   // Writing to a database table
@@ -85,7 +84,6 @@ object WritingDataFrames extends App {
       "dummy_person_data",
       dbProperties
     )
-
 
 
 }

@@ -1,4 +1,4 @@
-package com.play.spark3essential.part2
+package com.play.spark3essential
 
 import org.apache.spark.sql.types._
 import org.apache.spark.sql.{DataFrame, SparkSession}
@@ -14,10 +14,10 @@ object Dataframes extends App {
 
   // read data from a json file and infer schema structure (not recommened for prod)
   val dataFrame: DataFrame = sparkSession
-    .read     // creates a DataFrameReader
-    .option("inferSchema", true)  // provide options for the reader (
-    .format("json")       // specify the format as JSON file
-    .load("src/main/resources/data/cars.json")  // loads data from this path
+    .read // creates a DataFrameReader
+    .option("inferSchema", true) // provide options for the reader (
+    .format("json") // specify the format as JSON file
+    .load("src/main/resources/data/cars.json") // loads data from this path
 
 
   dataFrame.show() // shows top 20 records
@@ -38,40 +38,38 @@ object Dataframes extends App {
   // show the schema structure
   dataFrame.printSchema()
 
-  val schema: StructType= dataFrame.schema
+  val schema: StructType = dataFrame.schema
   println(schema)
-
 
 
   // Create own schema and use it to read dataframe
   // We are now reading only few fields per row ( and not all)
   val customSchema: StructType =
-    StructType(
-      Seq(
-        StructField("Name",  StringType),
-        StructField("Miles_per_Gallon",DoubleType),
-        StructField("Displacement",DoubleType),
-        StructField("Horsepower",LongType),
-        StructField("Acceleration",DoubleType),
-        StructField("Origin",StringType))
-    )
+  StructType(
+    Seq(
+      StructField("Name", StringType),
+      StructField("Miles_per_Gallon", DoubleType),
+      StructField("Displacement", DoubleType),
+      StructField("Horsepower", LongType),
+      StructField("Acceleration", DoubleType),
+      StructField("Origin", StringType))
+  )
 
   // We are now providing the schema
   // Also we provided path in `option` instead of `load` method
   val anotherDf =
-    sparkSession
-      .read
-      .format("json")
-      .option("path", "src/main/resources/data/cars.json")
-      .schema(customSchema)
-      .load()
+  sparkSession
+    .read
+    .format("json")
+    .option("path", "src/main/resources/data/cars.json")
+    .schema(customSchema)
+    .load()
 
   anotherDf.show(5)
 
 
-
   // creating data frames manually - just provide a seq of tuples
-  val personData:  Seq[(String, String, Int, String, String, String)] =
+  val personData: Seq[(String, String, Int, String, String, String)] =
     Seq(
       ("John", "Doe", 35, "Male", "USA", "Product Manager"),
       ("Pedro", "Iglesia", 25, "Male", "Spain", "Software Developer"),
@@ -83,7 +81,6 @@ object Dataframes extends App {
 
   manualDF.show()
   manualDF.printSchema()
-
 
 
   import sparkSession.implicits._

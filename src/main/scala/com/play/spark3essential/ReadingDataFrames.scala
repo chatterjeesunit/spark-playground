@@ -1,4 +1,4 @@
-package com.play.spark3essential.part2
+package com.play.spark3essential
 
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.types._
@@ -17,12 +17,12 @@ object ReadingDataFrames extends App {
   // Person Schema
   val personSchema = StructType(
     Seq(
-      StructField("First Name",StringType,true),
-      StructField("Last Name",StringType,true),
-      StructField("Age",IntegerType,false),
-      StructField("Gender",StringType,true),
-      StructField("Country",StringType,true),
-      StructField("Occupation",StringType,true)
+      StructField("First Name", StringType, true),
+      StructField("Last Name", StringType, true),
+      StructField("Age", IntegerType, false),
+      StructField("Gender", StringType, true),
+      StructField("Country", StringType, true),
+      StructField("Occupation", StringType, true)
     ))
 
   println("Reading person data in PERMISSIVE mode")
@@ -39,14 +39,13 @@ object ReadingDataFrames extends App {
   personDataFrame.show()
 
 
-
   println("Reading person data in DROPMALFORMED mode")
   // reading with mode - dropMalformed
   sparkSession
     .read
     .format("json")
     .options(Map(
-      "path"-> "src/main/resources/data/persons_data_malformed.json",
+      "path" -> "src/main/resources/data/persons_data_malformed.json",
       "mode" -> "dropMalformed"
     ))
     .schema(personSchema)
@@ -62,7 +61,7 @@ object ReadingDataFrames extends App {
     .read
     .format("json")
     .options(Map(
-      "path"-> "src/main/resources/data/persons_data_malformed.json",
+      "path" -> "src/main/resources/data/persons_data_malformed.json",
       "mode" -> "failFast"
     ))
     .schema(personSchema)
@@ -73,13 +72,13 @@ object ReadingDataFrames extends App {
   // READING DATE fields from json file.
   val personWithDateSchema = StructType(
     Seq(
-      StructField("First Name", StringType,   true),
-      StructField("Last Name",  StringType,   true),
-      StructField("Age",        IntegerType,  false),
-      StructField("Gender",     StringType,   true),
-      StructField("Country",    StringType,   true),
-      StructField("Occupation", StringType,   true),
-      StructField("DateOfBirth", DateType,     false)
+      StructField("First Name", StringType, true),
+      StructField("Last Name", StringType, true),
+      StructField("Age", IntegerType, false),
+      StructField("Gender", StringType, true),
+      StructField("Country", StringType, true),
+      StructField("Occupation", StringType, true),
+      StructField("DateOfBirth", DateType, false)
     ))
 
   // We will read DateOfBirth field, which is format as "31 Dec 1999"
@@ -87,7 +86,7 @@ object ReadingDataFrames extends App {
     .read
     .format("json")
     .options(Map(
-      "path"-> "src/main/resources/data/persons_data.json",
+      "path" -> "src/main/resources/data/persons_data.json",
       "mode" -> "failFast",
       "dateFormat" -> "dd MMM yyyy"
     ))
@@ -95,20 +94,20 @@ object ReadingDataFrames extends App {
     .load()
     .show()
 
-//  // if we are using the date format with year as YYYY instead of yyyy,
-//  // then we will have to add this configuration in spark session to use legacy time parsing
-//  sparkSession.conf.set( "spark.sql.legacy.timeParserPolicy",  "LEGACY")
-//  sparkSession
-//    .read
-//    .format("json")
-//    .options(Map(
-//      "path"-> "src/main/resources/data/persons_data.json",
-//      "mode" -> "failFast",
-//      "dateFormat" -> "dd MMM YYYY"
-//    ))
-//    .schema(personWithDateSchema)
-//    .load()
-//    .show()
+  //  // if we are using the date format with year as YYYY instead of yyyy,
+  //  // then we will have to add this configuration in spark session to use legacy time parsing
+  //  sparkSession.conf.set( "spark.sql.legacy.timeParserPolicy",  "LEGACY")
+  //  sparkSession
+  //    .read
+  //    .format("json")
+  //    .options(Map(
+  //      "path"-> "src/main/resources/data/persons_data.json",
+  //      "mode" -> "failFast",
+  //      "dateFormat" -> "dd MMM YYYY"
+  //    ))
+  //    .schema(personWithDateSchema)
+  //    .load()
+  //    .show()
 
 
   sparkSession
@@ -125,9 +124,9 @@ object ReadingDataFrames extends App {
   // Reading from CSV file
   val stockSchema = StructType(
     Seq(
-      StructField("symbol", StringType,   false),
-      StructField("date",   DateType,     false),
-      StructField("price",  DoubleType,   false)
+      StructField("symbol", StringType, false),
+      StructField("date", DateType, false),
+      StructField("price", DoubleType, false)
     ))
 
   sparkSession

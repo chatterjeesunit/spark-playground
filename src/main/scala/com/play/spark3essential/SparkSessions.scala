@@ -1,4 +1,4 @@
-package com.play.spark3essential.part2
+package com.play.spark3essential
 
 import org.apache.spark.sql.SparkSession
 
@@ -6,11 +6,11 @@ object SparkSessions extends App {
 
   // create a spark session
   val sparkSession1: SparkSession =
-      SparkSession
-        .builder()
-        .master("local") //Run locally
-        .appName("SparkSessionDemo")
-        .getOrCreate() // get existing session, and if not available, then create one
+    SparkSession
+      .builder()
+      .master("local") //Run locally
+      .appName("SparkSessionDemo")
+      .getOrCreate() // get existing session, and if not available, then create one
 
   //Run locally with 3 nodes
   val sparkSession2 = SparkSession.builder().master("local[3]").appName("demo2").getOrCreate()

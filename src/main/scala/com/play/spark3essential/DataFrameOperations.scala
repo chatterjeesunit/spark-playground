@@ -1,7 +1,7 @@
-package com.play.spark3essential.part2
+package com.play.spark3essential
 
 import org.apache.spark.sql.functions.{col, expr, lit}
-import org.apache.spark.sql.types._
+import org.apache.spark.sql.types.{DateType, IntegerType, StringType, StructField, StructType}
 import org.apache.spark.sql.{Column, SparkSession, functions}
 
 object DataFrameOperations extends App {
@@ -14,13 +14,13 @@ object DataFrameOperations extends App {
 
   val employeesSchema = StructType(
     Seq(
-      StructField("Name",         StringType,   false),
-      StructField("Gender",       StringType,   false),
-      StructField("Joining_Date", DateType,     false),
-      StructField("Role",         StringType,   false),
-      StructField("Salary",       StringType,   false),
-      StructField("Location",     StringType,   false),
-      StructField("Country",      StringType,   false)
+      StructField("Name", StringType, false),
+      StructField("Gender", StringType, false),
+      StructField("Joining_Date", DateType, false),
+      StructField("Role", StringType, false),
+      StructField("Salary", StringType, false),
+      StructField("Location", StringType, false),
+      StructField("Country", StringType, false)
     ))
 
   val employeesDf = sparkSession.read
@@ -87,14 +87,12 @@ object DataFrameOperations extends App {
     .show(5, false)
 
 
-
   employeesDf
     .withColumn("Year of Joining", yearOfJoining)
     .withColumn("Salary (K)", salaryDisplayStr)
     .withColumnRenamed("Location", "City")
     .drop("Gender", "Joining_Date", "Salary")
     .show(5)
-
 
 
   employeesDf
@@ -108,9 +106,9 @@ object DataFrameOperations extends App {
     .filter(
       expr("Location") === "Pune"
         and
-      expr("Role") === "Developer"
+        expr("Role") === "Developer"
         and
-      expr("Salary / 1000") > 150
+        expr("Salary / 1000") > 150
     )
     .show()
 
@@ -122,5 +120,3 @@ object DataFrameOperations extends App {
     .show()
 
 }
-
-
