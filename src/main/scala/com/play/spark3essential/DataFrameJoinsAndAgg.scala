@@ -62,7 +62,7 @@ object DataFrameJoinsAndAgg extends App {
         "inner"
       )
       .drop(
-"ratings_movieId", "tags_movieId",
+          "ratings_movieId", "tags_movieId",
           "ratings_ts", "tags_ts")
       .groupBy("movieId", "title", "genres")
       .agg(
